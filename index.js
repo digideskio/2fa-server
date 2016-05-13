@@ -1,7 +1,7 @@
 var twilio = require('twilio')
 var request = require('request')
 var http = require('http')
-
+var qs = require('querystring')
 var smsQueue = require('./lib/sms-queue')
 var log = require('./lib/log')
 var sign = require('./lib/sign')
@@ -117,6 +117,8 @@ module.exports = function(config){
   function recvHook(req,res,next){
  
     log('post from twilio',req.body)
+
+    req.body = qs.parse(req.body)
 
     //validate incoming request is from twilio using your auth token and the header from Twilio
     var header = req.headers['x-twilio-signature']
