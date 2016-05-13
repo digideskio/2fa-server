@@ -65,7 +65,7 @@ module.exports = function(config){
   function twoFactorRequest(req,res,next){
 
     var sig = req.headers['x-2fa-signature']
-    if(sign(stableStringify(req.body),secret) !== sig) { 
+    if(sign(new Buffer(stableStringify(req.body)),secret) !== sig) { 
       log('request rejected. did not have correct signature. '+req.url,req.method,req.headers)
       res.writeHead(403, { 'Content-Type':'application/json' });
       res.end('{"message":"invalid signature"}');
@@ -138,7 +138,7 @@ module.exports = function(config){
 }
 
 module.exports.request = function(host,secret,args,cb){
-  sig = sign(stableStringify(args),secret)
+  sig = sign(new Buffer(stableStringify(args)),secret)
   request.post(host+'/v1/2fa',{form:args,headers:{'x-2fa-signature':sig},json:true},function(err,res,body){
     cb(err,body)
   })

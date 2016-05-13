@@ -28,5 +28,5 @@ var argv = require('yargs')
 
 
 
-tfaServer.client(argv.host,argv,console.log)
+tfaServer.request(argv.host,argv,console.log)
 
