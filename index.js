@@ -52,6 +52,7 @@ module.exports = function(config){
   })
 
   var server = http.createServer(function(req,res){
+    alog(req,res)
     if(req.method.toLowerCase() === 'post') {
       if(req.url === '/v1/twilio-recvhook'){
         return drain(req,res,recvHook)
@@ -168,11 +169,11 @@ function cleanProto(proto){
 
 function drain(req,res,middleware){
   var data = []
-  res.on('data',function(b){
+  req.on('data',function(b){
     data.push(b)
   })
 
-  res.on('end',function(){
+  req.on('end',function(){
     req.body = Buffer.concat(data)+''
     middleware(req,res,function(){
       alog(req,res)
