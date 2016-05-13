@@ -5,7 +5,6 @@ var http = require('http')
 var smsQueue = require('./lib/sms-queue')
 var log = require('./lib/log')
 var sign = require('./lib/sign')
-var stableStringify = require('json-stable-stringify')
 var cleanPhone = require('./lib/clean-phone')
 
 /*
@@ -52,7 +51,7 @@ module.exports = function(config){
   })
 
   var server = http.createServer(function(req,res){
-    alog(req,res)
+    console.log(JSON.stringify({date:new Date(),start:req.url}))
     if(req.method.toLowerCase() === 'post') {
       if(req.url === '/v1/twilio-recvhook'){
         return drain(req,res,recvHook)
@@ -123,7 +122,7 @@ module.exports = function(config){
     var header = req.headers['x-twilio-signature']
 
     //validateRequest returns true if the request originated from Twilio
-    if (twilio.validateRequest(token, header, cleanProto(req.headers['x-forwarded-proto']||config.protocol||'http')+'://'+req.headers.host+req.url, req.body)) {
+    if (twilio.validateRequest(config.token, header, cleanProto(req.headers['x-forwarded-proto']||config.protocol||'http')+'://'+req.headers.host+req.url, req.body)) {
 
       phone = cleanPhone(req.body.From)
 
@@ -155,10 +154,9 @@ module.exports = function(config){
 module.exports.request = function(host,secret,args,cb){
 
   var body = JSON.stringify(args)
-
   sig = sign(new Buffer(body),secret)
 
-  request.post(host+'/v1/2fa',{body:body,headers:{'x-2fa-signature':sig},json:true},function(err,res,body){
+  request.post(host+'/v1/2fa',{body:body,headers:{'x-2fa-signature':sig}},function(err,res,body){
     cb(err,body)
   })
 }
