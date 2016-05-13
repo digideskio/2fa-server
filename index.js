@@ -1,5 +1,6 @@
 var twilio = require('twilio')
 var request = require('request')
+var http = require('http')
 
 var smsQueue = require('./lib/sms-queue')
 var log = require('./lib/log')
