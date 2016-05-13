@@ -30,6 +30,10 @@ var argv = require('yargs')
     describe: 'your twilio authToken',
     required:true
   })
+  .option("protocol",{
+    describe:'the protocol for your twillio endpoint.',
+    default: "http"
+  })
   .help('h')
   .alias('h', 'help').argv
 

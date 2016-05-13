@@ -122,7 +122,7 @@ module.exports = function(config){
     var header = req.headers['x-twilio-signature']
 
     //validateRequest returns true if the request originated from Twilio
-    if (twilio.validateRequest(token, header, cleanProto(req.headers['x-forwarded-proto']||config.protocol||'https')+'://'+req.headers.host+req.url, req.body)) {
+    if (twilio.validateRequest(token, header, cleanProto(req.headers['x-forwarded-proto']||config.protocol||'http')+'://'+req.headers.host+req.url, req.body)) {
 
       phone = cleanPhone(req.body.From)
 
