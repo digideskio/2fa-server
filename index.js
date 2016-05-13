@@ -85,6 +85,8 @@ module.exports = function(config){
       return next()
     }
 
+    args.to = args.to+''
+
     if(args.to.indexOf('+') !== 0) {
       res.writeHead(400, { 'Content-Type':'application/json' });
       res.end('{"message":"please prefix the phone number with +[country code] see https://www.twilio.com/help/faq/phone-numbers/how-do-i-format-phone-numbers-to-work-internationally"}')
