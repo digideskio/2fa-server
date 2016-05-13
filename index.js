@@ -106,9 +106,9 @@ module.exports = function(config){
     //Send an SMS text message
     queue.send(args,function(err,confirmed){
       if(err) {
-        res.end(JSON.stringfy({message:"error sending sms to "+args.to+'. '+err}))
+        res.end(JSON.stringify({message:"error sending sms to "+args.to+'. '+err}))
       } else { 
-        res.end(JSON.stringfy({confirmed:confirmed}))
+        res.end(JSON.stringify({confirmed:confirmed}))
       }
       next()
     })
