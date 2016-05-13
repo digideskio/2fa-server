@@ -27,6 +27,10 @@ var argv = require('yargs')
   .alias('h', 'help').argv
 
 
+var secret = argv.secret
+var server = argv.server
+delete argv.secret
+delete argv.server
 
-tfaServer.request(argv.host,argv,console.log)
+tfaServer.request(server,secret,argv,console.log)
 
