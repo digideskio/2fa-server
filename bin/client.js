@@ -9,7 +9,8 @@ var argv = require('yargs')
   })
   .option('to',{
     describe:"the phone number you are going to ask for confirmation",
-    required:true
+    required:true,
+    type:"string"
   })
   .option('message', {
     describe: 'the question you want to ask',

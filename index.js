@@ -1,4 +1,3 @@
-var restify = require('restify');
 var twilio = require('twilio')
 var request = require('request')
 
@@ -51,14 +50,21 @@ module.exports = function(config){
     },cb)
   })
 
-  var server = restify.createServer();
-  server.use(restify.bodyParser())
-  server.post('/v1/twilio-recvhook', recvHook);
-  server.post('/v1/2fa', twoFactorRequest);
+  var server = http.createServer(function(req,res){
+    if(req.method.toLowerCase() === 'post') {
+      if(req.url === '/v1/twilio-recvhook'){
+        return drain(req,res,recvHook)
+      } else if(req.url == '/v1/2fa'){ 
+        return drain(req,res,twoFactorRequest)
+      }
+    }
+    
+    res.statusCode = 404
+    res.end('{"message":"not found"}')
 
-  server.listen(config.port||8080, function() {
-    console.log('%s listening at %s', server.name, server.url);
-  });
+  }).listen(config.port||8080,function(){
+    console.log('listening') 
+  })
 
   return server
 
@@ -157,4 +163,22 @@ module.exports.request = function(host,secret,args,cb){
 
 function cleanProto(proto){
   return proto.replace(/[^a-z]/gi,'')
+}
+
+function drain(req,res,middleware){
+  var data = []
+  res.on('data',function(b){
+    data.push(b)
+  })
+
+  res.on('end',function(){
+    req.body = Buffer.concat(data)+''
+    middleware(req,res,function(){
+      alog(req,res)
+    })
+  })
+}
+
+function alog(req,res){ 
+  console.log(JSON.stringify({t:new Date(),url:req.url,code:res.statusCode}))
 }
