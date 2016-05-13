@@ -13,12 +13,15 @@ var argv = require('yargs')
     type:"string"
   })
   .option('message', {
+    alias:"question",
     describe: 'the question you want to ask',
     required:true
   })
   .option('agreement',{
+    alias:"answer",
     describe:"the text required in response to confirm the action. case insensitive. head match.",
-    default: 'ok'
+    default: 'ok',
+    type:"string"
   })
   .option('server', {
     describe: 'the url to the server ',

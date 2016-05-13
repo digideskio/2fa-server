@@ -1,6 +1,6 @@
 {
   "name": "2fa-server",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "a server for implementing 2fa for actions",
   "main": "index.js",
   "bin": {
